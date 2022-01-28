@@ -33,9 +33,15 @@ public class ConatctController {
 	}
 	
 	@RequestMapping(path = "/processForm" , method = RequestMethod.POST)
-	public String formProcess(@ModelAttribute User user, Model model) {
+	public String formProcess(@ModelAttribute("user") User user, Model model) {
 		
-		this.userService.createUser(user);
+		
+		if (user.getEmail().isBlank()) {
+			return "redirect:/contact";
+		}
+		
+		int createUser = this.userService.createUser(user);
+		model.addAttribute("msg", "User created wit id " + createUser);
 		
 		
 		return "form";
